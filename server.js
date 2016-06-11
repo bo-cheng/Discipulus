@@ -3,7 +3,7 @@ var http = require('http');
 var dispatcher = require('httpdispatcher');
 
 //Lets define a port we want to listen to
-const PORT=8080;
+const PORT=8081;
 
 
 var ergebnis;
@@ -35,14 +35,19 @@ dispatcher.setStatic('./');
 dispatcher.onPost("/authenticate", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	//res.end('Got Post Data');
-	authenticate(res);
+	authenticate(res,"auth"); //TODO: req für routing benutzen
 });
 
-function authenticate(request)
+dispatcher.onPost("/getClasses", function(req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
+
+	authenticate(res,"classes"); //TODO: req für routing benutzen
+})
+
+function authenticate(request, type)
 {
 	if(ergebnis!=null)
 		{
-			logout(ergebnis.result.sessionId)
 			console.log("Abgemeldet")
 		}
 	var http = require("https");
@@ -64,16 +69,29 @@ function authenticate(request)
 			chunks.push(chunk);
 		});
 
+		var returnValue;
+
 		res.on("end", function () {
 			var body = Buffer.concat(chunks);
 			ergebnis = JSON.parse(body.toString())
 			console.log(ergebnis.result.sessionId)
-			getSubjects(ergebnis.result.sessionId, request)
+			routing(ergebnis, ergebnis.result.sessionId, type, request);
 		});
 	});
 
 	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"HWG\",\n        \"password\": \"WMS4\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
 	req.end();
+}
+
+function routing(result, sessionId, type, request) {
+	if (type == "auth")
+	{
+		getSubjects(ergebnis.result.sessionId, request)
+	}
+	else if (type == "classes")
+	{
+		getClasses(ergebnis.result.sessionId, request)
+	}
 }
 
 function getSubjects(sessionID, request)
@@ -127,5 +145,39 @@ function logout(sessionId)
 	var req = http.request(options, function (res) {});
 
 	req.write("{\"id\":\"ID\",\"method\":\"logout\",\"params\":{},\"jsonrpc\":\"2.0\"}");
+	req.end();
+}
+
+function getClasses(sessionID, request)
+{
+	var http = require("https");
+
+	var options = {
+		"method": "POST",
+		"hostname": "stundenplan.hamburg.de",
+		"port": null,
+		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionID + "?school=HH5888",
+		"headers": {
+			"cache-control": "no-cache",
+			"JSESSIONID": sessionID
+		}
+	};
+
+	var req = http.request(options, function (res) {
+		var chunks = [];
+
+		res.on("data", function (chunk) {
+			chunks.push(chunk);
+		});
+
+		res.on("end", function () {
+			var body = Buffer.concat(chunks);
+			console.log("gotClasses")
+			console.log(body.toString())
+			request.end(body.toString())
+		});
+	});
+
+	req.write("{\"id\":\"ID\",\"method\":\"getKlassen\",\"jsonrpc\":\"2.0\"}");
 	req.end();
 }

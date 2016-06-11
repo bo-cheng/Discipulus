@@ -1,32 +1,62 @@
-var stunden;
-
 $(document).ready(function(){
 	// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
 	$('.modal-trigger').leanModal();
 	$('select').material_select();
-	authenticate();
+	zeigeFächerAn();
 });
 
-function authenticate()
+function zeigeFächerAn()
 {
+	macheRequestUndFülleTabelle("authenticate", "fächer")
+}
+
+function macheRequestUndFülleTabelle(requestTyp, typ)
+{
+	clearTable()
+
 	$.ajax({
 		type: "POST",
-		url: "http://127.0.0.1:8080/authenticate",
+		url: "http://127.0.0.1:8081/" + requestTyp,
 		data: ''
 	})
 		.done(function (data) {
-		stunden = JSON.parse(data)
-		fillTable()
+		fillTable(JSON.parse(data), typ)
 	});
 }
 
-function fillTable()
+function clearTable()
 {
-	var stundenList = stunden.result
-	console.log(stunden.result)
-	for (i = 0; i < stunden.result.length; i++)
+	var myNode = document.getElementById("tableID");
+	while (myNode.firstChild) {
+		myNode.removeChild(myNode.firstChild);
+	}
+}
+
+function zeigeKlassenAn()
+{
+	macheRequestUndFülleTabelle("getClasses", "klassen")
+}
+
+function fillTable(stundenListe, typ)
+{
+	if(typ=="fächer")
+		{
+			setTableHeaders("Fachname", "Fachabkürzung", "Ist Aktiv");
+		}
+	else if (typ = "klassen")
+		{
+			setTableHeaders("Klassenname", "Klassenabkürzung", "Ist Aktiv");
+		}
+
+	werteZuTabelleHinzufügen(stundenListe)
+}
+
+function werteZuTabelleHinzufügen(werte)
+{
+	var werteListe = werte.result
+	for (i = 0; i < werteListe.length; i++)
 	{
-		fügeZuTabelleHinzu(stundenList[i])
+		fügeZuTabelleHinzu(werteListe[i])
 	}
 }
 
@@ -39,16 +69,23 @@ function fügeZuTabelleHinzu(stunde)
 
 
 	if(stunde.backColor != null)
-		{
-			row.setAttribute("style", "background-color: #" + stunde.backColor.toString())
-			console.log("Hintergrundfarbe " + stunde.backColor + " gesetzt.")
-		}
+	{
+		row.setAttribute("style", "background-color: #" + stunde.backColor.toString())
+		console.log("Hintergrundfarbe " + stunde.backColor + " gesetzt.")
+	}
 
-	var fachname = row.insertCell(0);
-	var fachabkürzung = row.insertCell(1);
-	var istAktiv = row.insertCell(2);
+	var row1 = row.insertCell(0);
+	var row2 = row.insertCell(1);
+	var row3 = row.insertCell(2);
 
-	fachname.innerHTML = stunde.longName
-	fachabkürzung.innerHTML = stunde.name
-	istAktiv.innerHTML = stunde.active
+	row1.innerHTML = stunde.longName
+	row2.innerHTML = stunde.name
+	row3.innerHTML = stunde.active
+}
+
+function setTableHeaders(header1, header2, header3)
+{
+	document.getElementById("name1").innerHTML=header1
+	document.getElementById("name2").innerHTML=header2
+	document.getElementById("name3").innerHTML=header3
 }
