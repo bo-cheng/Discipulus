@@ -7,25 +7,10 @@ $(document).ready(function(){
 
 function authenticate()
 {
-	var serverStamm = "https://stundenplan.hamburg.de/WebUntis/jsonrpc.do?school="
-	var schuleEndung = ""
-	var server = serverStamm + schuleEndung
-
 	$.ajax({
 		type: "POST",
-		url: server,
-		data: {
-			"id": "1",
-			"method": "authenticate",
-			"params": {
-				"user": document.getElementById("username").textContent,
-				"password": document.getElementById("password").textContent
-			},
-			"jsonrpc": "2.0"
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			console.log(errorThrown);
-		},
+		url: "http://127.0.0.1:8080/post1",
+		data: ''
 	})
 	.done(function (data) {
 		console.log(data)
