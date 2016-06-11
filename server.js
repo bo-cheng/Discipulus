@@ -3,7 +3,7 @@ var http = require('http');
 var dispatcher = require('httpdispatcher');
 
 //Lets define a port we want to listen to
-const PORT=8081;
+const PORT=8080;
 
 
 var ergebnis;
@@ -24,7 +24,6 @@ var server = http.createServer(handleRequest);
 
 //Lets start our server
 server.listen(PORT, function(){
-	//Callback triggered when server is successfully listening. Hurray!
 	console.log("Server listening on: http://localhost:%s", PORT);
 });
 
@@ -32,10 +31,10 @@ server.listen(PORT, function(){
 dispatcher.setStatic('./');
 
 //A sample POST request
-dispatcher.onPost("/authenticate", function(req, res) {
+dispatcher.onPost("/getSubjects", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	//res.end('Got Post Data');
-	authenticate(res,"auth"); //TODO: req für routing benutzen
+	authenticate(res,"subjects"); //TODO: req für routing benutzen
 });
 
 dispatcher.onPost("/getClasses", function(req, res) {
@@ -84,7 +83,7 @@ function authenticate(request, type)
 }
 
 function routing(result, sessionId, type, request) {
-	if (type == "auth")
+	if (type == "subjects")
 	{
 		getSubjects(ergebnis.result.sessionId, request)
 	}

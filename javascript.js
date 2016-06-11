@@ -1,22 +1,31 @@
 $(document).ready(function(){
-	// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+	//Intialisierungen für MaterialzeCSS
 	$('.modal-trigger').leanModal();
 	$('select').material_select();
+	//Zeigt die Start Ansicht an
 	zeigeFächerAn();
 });
 
+//Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Fächer von der WebUntis API.
 function zeigeFächerAn()
 {
-	macheRequestUndFülleTabelle("authenticate", "fächer")
+	macheRequestUndFülleTabelle("getSubjects", "fächer")
 }
 
+//Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Klassen von der WebUntis API.
+function zeigeKlassenAn()
+{
+	macheRequestUndFülleTabelle("getClasses", "klassen")
+}
+
+//Macht ein Request an einen nodeJS Server. Dieser fragt die Daten bei der WebUntis API ab und gibt sie wieder zurück. Das Leeren und Befüllen der Tabelle wird delegiert.
 function macheRequestUndFülleTabelle(requestTyp, typ)
 {
 	clearTable()
 
 	$.ajax({
 		type: "POST",
-		url: "http://127.0.0.1:8081/" + requestTyp,
+		url: "http://127.0.0.1:8080/" + requestTyp,
 		data: ''
 	})
 		.done(function (data) {
@@ -24,6 +33,7 @@ function macheRequestUndFülleTabelle(requestTyp, typ)
 	});
 }
 
+//Leert die Tabelle. D.h. dass Childnodes vom TableBody entfernt werden.
 function clearTable()
 {
 	var myNode = document.getElementById("tableID");
@@ -32,11 +42,7 @@ function clearTable()
 	}
 }
 
-function zeigeKlassenAn()
-{
-	macheRequestUndFülleTabelle("getClasses", "klassen")
-}
-
+//Aktualisiert die Header der Tabelle. Die Befüllung wird weiter delegiert.
 function fillTable(stundenListe, typ)
 {
 	if(typ=="fächer")
@@ -51,6 +57,7 @@ function fillTable(stundenListe, typ)
 	werteZuTabelleHinzufügen(stundenListe)
 }
 
+//Iteriert über die einzelnen Einträge der Wertelist. Das konkrete hinzufügen wird delegiert.
 function werteZuTabelleHinzufügen(werte)
 {
 	var werteListe = werte.result
@@ -60,6 +67,7 @@ function werteZuTabelleHinzufügen(werte)
 	}
 }
 
+//Fügt ein Element der Tabelle hinzu.
 function fügeZuTabelleHinzu(stunde)
 {
 	var tabelle = document.getElementById("tableID");
@@ -83,6 +91,7 @@ function fügeZuTabelleHinzu(stunde)
 	row3.innerHTML = stunde.active
 }
 
+//Setzt die Header der Tabelle.
 function setTableHeaders(header1, header2, header3)
 {
 	document.getElementById("name1").innerHTML=header1
