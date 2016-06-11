@@ -1,8 +1,9 @@
 $(document).ready(function(){
-    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-    $('.modal-trigger').leanModal();
-    $('select').material_select();
-  });
+	// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+	$('.modal-trigger').leanModal();
+	$('select').material_select();
+	authenticate();
+});
 
 function authenticate()
 {
@@ -21,6 +22,12 @@ function authenticate()
 				"password": document.getElementById("password").textContent
 			},
 			"jsonrpc": "2.0"
-		}
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(errorThrown);
+		},
+	})
+	.done(function (data) {
+		console.log(data)
 	});
 }
