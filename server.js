@@ -5,6 +5,8 @@ var dispatcher = require('httpdispatcher');
 //Lets define a port we want to listen to
 const PORT=8080;
 
+
+var ergebnis;
 //We need a function which handles requests and send response
 function handleRequest(request, response){
 	try {
@@ -29,21 +31,20 @@ server.listen(PORT, function(){
 //For all your static (js/css/images/etc.) set the directory name (relative path).
 dispatcher.setStatic('./');
 
-//A sample GET request
-dispatcher.onGet("/page1", function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end('Page One');
-});
-
 //A sample POST request
-dispatcher.onPost("/post1", function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
+dispatcher.onPost("/authenticate", function(req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	//res.end('Got Post Data');
 	authenticate(res);
 });
 
 function authenticate(request)
 {
+	if(ergebnis!=null)
+		{
+			logout(ergebnis.result.sessionId)
+			console.log("Abgemeldet")
+		}
 	var http = require("https");
 
 	var options = {
@@ -52,8 +53,7 @@ function authenticate(request)
 		"port": null,
 		"path": "/WebUntis/jsonrpc.do?school=HH5888",
 		"headers": {
-			"cache-control": "no-cache",
-			"postman-token": "9e56bdf5-6015-ee05-700a-d6dcaf2abec4"
+			"cache-control": "no-cache"
 		}
 	};
 
@@ -66,11 +66,66 @@ function authenticate(request)
 
 		res.on("end", function () {
 			var body = Buffer.concat(chunks);
-			console.log(body.toString());
-			request.end(body.toString());
+			ergebnis = JSON.parse(body.toString())
+			console.log(ergebnis.result.sessionId)
+			getSubjects(ergebnis.result.sessionId, request)
 		});
 	});
 
 	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"HWG\",\n        \"password\": \"WMS4\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
+	req.end();
+}
+
+function getSubjects(sessionID, request)
+{
+	var http = require("https");
+
+	var options = {
+		"method": "POST",
+		"hostname": "stundenplan.hamburg.de",
+		"port": null,
+		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionID + "?school=HH5888",
+		"headers": {
+			"cache-control": "no-cache",
+			"JSESSIONID": sessionID
+		}
+	};
+
+	var req = http.request(options, function (res) {
+		var chunks = [];
+
+		res.on("data", function (chunk) {
+			chunks.push(chunk);
+		});
+
+		res.on("end", function () {
+			var body = Buffer.concat(chunks);
+			console.log("gotSubjects")
+			request.end(body.toString())
+		});
+	});
+
+	req.write("{\"id\":\"ID\",\"method\":\"getSubjects\",\"jsonrpc\":\"2.0\"}");
+	req.end();
+}
+
+function logout(sessionId)
+{
+	var http = require("https");
+
+	var options = {
+		"method": "POST",
+		"hostname": "stundenplan.hamburg.de",
+		"port": null,
+		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionId + "?school=HH5888",
+		"headers": {
+			"cache-control": "no-cache",
+			"JSESSIONID": sessionId
+		}
+	};
+
+	var req = http.request(options, function (res) {});
+
+	req.write("{\"id\":\"ID\",\"method\":\"logout\",\"params\":{},\"jsonrpc\":\"2.0\"}");
 	req.end();
 }

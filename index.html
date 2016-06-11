@@ -2,13 +2,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
-        <!--Css-Link-->
-        <link href="style.css" type="text/css" rel="stylesheet"/>
+		<!--Css-Link-->
+		<link href="style.css" type="text/css" rel="stylesheet"/>
 		<!--Import Google Icon Font-->
 		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<!--Import materialize.css-->
 		<link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-        <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.png">
 		<!--Let browser know website is optimized for mobile-->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>Discipulus</title>
@@ -20,38 +20,38 @@
 		<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
 		<script type="text/javascript" src="javascript.js"></script>
 		<nav>
-            <div class="nav-wrapper light-blue accent-3">              
-            <a id="logopic" href="#" class="brand-logo">
-                <img src="favicon.png" width="50px" height="30px"/>
-            </a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li>   
-                    <a class="waves-effect waves-light btn orange modal-trigger" href="#modal1">Login</a>
-                </li>
-            </ul>
-            </div>
-        </nav>
+			<div class="nav-wrapper light-blue accent-3">
+				<a id="logopic" href="#" class="brand-logo">
+					<img src="favicon.png" width="50px" height="30px"/>
+				</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li>
+						<a class="waves-effect waves-light btn orange modal-trigger" href="#modal1">Login</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
 
-  <!-- Modal Trigger -->
-  
+		<!-- Modal Trigger -->
 
- 	<!-- Modal Structure -->
+
+		<!-- Modal Structure -->
 		<div id="modal1" class="modal">
-			
+
 			<div class="modal-content">
 				<h4>Anmelden</h4>
 				<div class="input-field col s12">
-				<select>
-				  <option value="" disabled selected>Schule ausw&auml;hlen</option>
-				  <option value="1">Schule 1</option>
-				  <option value="2">Schule 2</option>
-				  <option value="3">Schule 3</option>
-				  <option value="4">Schule 4</option>
-				  <option value="5">Schule 5</option>
-				  <option value="6">Schule 6</option>
-				  <option value="7">Schule 7</option>
-				</select>
-				<label>Schule ausw&auml;hlen</label>
+					<select>
+						<option value="" disabled selected>Schule ausw&auml;hlen</option>
+						<option value="1">Schule 1</option>
+						<option value="2">Schule 2</option>
+						<option value="3">Schule 3</option>
+						<option value="4">Schule 4</option>
+						<option value="5">Schule 5</option>
+						<option value="6">Schule 6</option>
+						<option value="7">Schule 7</option>
+					</select>
+					<label>Schule ausw&auml;hlen</label>
 				</div>
 				<div class="input-field col s6">
 					<input id="username" type="text" class="validate">
@@ -66,5 +66,21 @@
 				<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Anmelden</a>
 			</div>
 		</div>
+
+		<div class="container">
+			<table class="bordered">
+				<thead>
+					<tr>
+						<th data-field="long">Fachname</th>
+						<th data-field="short">Fachabkürzung</th>
+						<th data-field="activated">Ist Aktiv</th>
+					</tr>
+				</thead>
+
+				<tbody id="tableID">
+				</tbody>
+			</table>
+		</div>
+
 	</body>
 </html>
