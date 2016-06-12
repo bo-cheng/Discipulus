@@ -13,11 +13,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>Discipulus</title>
 		<style>
-			html { height: 100%;}
-			body { height: 100%;}
-			#container1 { height: 100%;}
-			#row1 { height: 100%;}
-			#test2 { height: 100%;}
+			html { height: 100%; }
+			body { height: 100%; }
+			#section { height: 100%; }
+			#container1 { height: 100%; }
+			#row1 { height: 100%; }
+			#test2 { height: 100%; }
 		</style>
 	</head>
 
@@ -74,37 +75,42 @@
 			</div>
 		</div>
 
-		<div class="container" id="container1">
-			<div class="row" id="row1">
-				<div class="col s12">
-					<ul class="tabs">
-						<li class="tab col s3"><a href="#test1" class="active">Informationen</a></li>
-						<li class="tab col s3"><a class="active" href="#test2">TODO-Liste</a></li>
-					</ul>
-				</div>
-				<div id="test1" class="col s12">
-					<div>
-						<div class="center-align">
-							<a class="waves-effect waves-light btn" onclick="zeigeKlassenAn()">Klassen anzeigen</a>
-							<a class="waves-effect waves-light btn" onclick="zeigeFächerAn()">F&auml;cher anzeigen</a>
-						</div>
 
-						<table class="bordered">
-							<thead>
-								<tr>
-									<th id="name1">Fachname</th>
-									<th id="name2">Fachabk&uuml;rzung</th>
-									<th id="name3">Ist Aktiv</th>
-								</tr>
-							</thead>
-
-							<tbody id="tableID">
-							</tbody>
-						</table>
+		<div class="section" id="section">
+			<div class="container" id="container1">
+				<div class="row" id="row1">
+					<div class="col s12">
+						<ul class="tabs">
+							<li class="tab col s3"><a href="#test1" class="active">Informationen</a></li>
+							<li class="tab col s3"><a class="active" href="#test2">TODO-Liste</a></li>
+						</ul>
 					</div>
-				</div>
-				<div id="test2" class="col s12" height="inherit">
-					<iframe width="100%" height="100%" frameborder="0" src="http://172.16.102.200:4594"></iframe>
+					<div id="test1" class="col s12">
+						<div>
+							<div class="section">
+								<div class="center-align">
+									<a class="waves-effect waves-light btn" onclick="zeigeKlassenAn()">Klassen anzeigen</a>
+									<a class="waves-effect waves-light btn" onclick="zeigeFächerAn()">F&auml;cher anzeigen</a>
+								</div>
+							</div>
+
+							<table class="bordered">
+								<thead>
+									<tr>
+										<th id="name1">Fachname</th>
+										<th id="name2">Fachabk&uuml;rzung</th>
+										<th id="name3">Ist Aktiv</th>
+									</tr>
+								</thead>
+
+								<tbody id="tableID">
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div id="test2" class="col s12" height="inherit">
+						<iframe width="100%" height="100%" frameborder="0" src="http://172.16.102.200:4594"></iframe>
+					</div>
 				</div>
 			</div>
 		</div>
