@@ -1,13 +1,13 @@
-//Lets require/import the HTTP module
+//Importieren/Requiren von den benötigten Modulen
 var http = require('http');
 var dispatcher = require('httpdispatcher');
 
-//Lets define a port we want to listen to
+//Der Port, auf dem der Server läuft.
 const PORT=8080;
 
-
+//Die Variable, die die jetzige Sesion speichert
 var ergebnis;
-//We need a function which handles requests and send response
+//Diese Mehotde verarbeitet alle Anfragen an der Server
 function handleRequest(request, response){
 	try {
 		//log the request on console
@@ -19,36 +19,34 @@ function handleRequest(request, response){
 	}
 }
 
-//Create a server
+//Deklariert den Server mit der Callback Methode
 var server = http.createServer(handleRequest);
 
-//Lets start our server
+//Startet den Server
 server.listen(PORT, function(){
 	console.log("Server listening on: http://localhost:%s", PORT);
 });
 
-//For all your static (js/css/images/etc.) set the directory name (relative path).
-dispatcher.setStatic('./');
-
-//A sample POST request
+//Verarbeiten die beiden unterschiedlichen Requests
 dispatcher.onPost("/getSubjects", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	//res.end('Got Post Data');
-	authenticate(res,"subjects"); //TODO: req für routing benutzen
+	authenticate(res,"getSubjects"); //TODO: req für routing benutzen
 });
 
 dispatcher.onPost("/getClasses", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 
-	authenticate(res,"classes"); //TODO: req für routing benutzen
+	authenticate(res,"getKlassen"); //TODO: req für routing benutzen
 })
 
+//Authentifiziert den Server mit einer neuen SessionID
 function authenticate(request, type)
 {
 	if(ergebnis!=null)
-		{
-			console.log("Abgemeldet")
-		}
+	{
+		logout(ergebnis.result.sessionId)
+		console.log("Abgemeldet")
+	}
 	var http = require("https");
 
 	var options = {
@@ -74,7 +72,7 @@ function authenticate(request, type)
 			var body = Buffer.concat(chunks);
 			ergebnis = JSON.parse(body.toString())
 			console.log(ergebnis.result.sessionId)
-			routing(ergebnis, ergebnis.result.sessionId, type, request);
+			routing(ergebnis.result.sessionId, type, request);
 		});
 	});
 
@@ -82,17 +80,19 @@ function authenticate(request, type)
 	req.end();
 }
 
-function routing(result, sessionId, type, request) {
-	if (type == "subjects")
+//Eine Routing Methode
+function routing(sessionId, type, request) {
+	if (type == "getSubjects")
 	{
-		getSubjects(ergebnis.result.sessionId, request)
+		getSubjects(sessionId, request)
 	}
-	else if (type == "classes")
+	else if (type == "getKlassen")
 	{
-		getClasses(ergebnis.result.sessionId, request)
+		getClasses(sessionId, request)
 	}
 }
 
+//Holt alle Fächer von der API und gibt sie an den Request zurück.
 function getSubjects(sessionID, request)
 {
 	var http = require("https");
@@ -126,27 +126,7 @@ function getSubjects(sessionID, request)
 	req.end();
 }
 
-function logout(sessionId)
-{
-	var http = require("https");
-
-	var options = {
-		"method": "POST",
-		"hostname": "stundenplan.hamburg.de",
-		"port": null,
-		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionId + "?school=HH5888",
-		"headers": {
-			"cache-control": "no-cache",
-			"JSESSIONID": sessionId
-		}
-	};
-
-	var req = http.request(options, function (res) {});
-
-	req.write("{\"id\":\"ID\",\"method\":\"logout\",\"params\":{},\"jsonrpc\":\"2.0\"}");
-	req.end();
-}
-
+//Holt alle Klassen/Gruppen von der API und gibt sie an den Request zuück.5
 function getClasses(sessionID, request)
 {
 	var http = require("https");
@@ -180,3 +160,28 @@ function getClasses(sessionID, request)
 	req.write("{\"id\":\"ID\",\"method\":\"getKlassen\",\"jsonrpc\":\"2.0\"}");
 	req.end();
 }
+
+
+//Meldet den Server ab.
+function logout(sessionId)
+{
+	var http = require("https");
+
+	var options = {
+		"method": "POST",
+		"hostname": "stundenplan.hamburg.de",
+		"port": null,
+		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionId + "?school=HH5888",
+		"headers": {
+			"cache-control": "no-cache",
+			"JSESSIONID": sessionId
+		}
+	};
+
+	var req = http.request(options, function (res) {});
+
+	req.write("{\"id\":\"ID\",\"method\":\"logout\",\"params\":{},\"jsonrpc\":\"2.0\"}");
+	req.end();
+}
+
+

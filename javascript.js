@@ -2,6 +2,7 @@ $(document).ready(function(){
 	//Intialisierungen für MaterialzeCSS
 	$('.modal-trigger').leanModal();
 	$('select').material_select();
+	$('ul.tabs').tabs();
 	//Zeigt die Start Ansicht an
 	zeigeFächerAn();
 });
