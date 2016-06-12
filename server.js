@@ -30,13 +30,13 @@ server.listen(PORT, function(){
 //Verarbeiten die beiden unterschiedlichen Requests
 dispatcher.onPost("/getSubjects", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	authenticate(res,"getSubjects"); //TODO: req für routing benutzen
+	authenticate(res,"getSubjects"); //FUTURE: req für routing benutzen
 });
 
 dispatcher.onPost("/getClasses", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 
-	authenticate(res,"getKlassen"); //TODO: req für routing benutzen
+	authenticate(res,"getKlassen"); //FUTURE: req für routing benutzen
 })
 
 //Authentifiziert den Server mit einer neuen SessionID
@@ -72,28 +72,16 @@ function authenticate(request, type)
 			var body = Buffer.concat(chunks);
 			ergebnis = JSON.parse(body.toString())
 			console.log(ergebnis.result.sessionId)
-			routing(ergebnis.result.sessionId, type, request);
+			mergedRequests(ergebnis.result.sessionId, type, request);
 		});
 	});
 
-	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"HWG\",\n        \"password\": \"WMS4\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
+	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"Benutzer\",\n        \"password\": \"Passwort\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
 	req.end();
 }
 
-//Eine Routing Methode
-function routing(sessionId, type, request) {
-	if (type == "getSubjects")
-	{
-		getSubjects(sessionId, request)
-	}
-	else if (type == "getKlassen")
-	{
-		getClasses(sessionId, request)
-	}
-}
-
-//Holt alle Fächer von der API und gibt sie an den Request zurück.
-function getSubjects(sessionID, request)
+//Ruft mit sessionID an der WebUntis API die Operation type auf und gibt das Ergebnis an request zurück.
+function mergedRequests(sessionID, type, request)
 {
 	var http = require("https");
 
@@ -117,47 +105,12 @@ function getSubjects(sessionID, request)
 
 		res.on("end", function () {
 			var body = Buffer.concat(chunks);
-			console.log("gotSubjects")
+			console.log(type+"; Length: " + body.toString().length)
 			request.end(body.toString())
 		});
 	});
 
-	req.write("{\"id\":\"ID\",\"method\":\"getSubjects\",\"jsonrpc\":\"2.0\"}");
-	req.end();
-}
-
-//Holt alle Klassen/Gruppen von der API und gibt sie an den Request zuück.5
-function getClasses(sessionID, request)
-{
-	var http = require("https");
-
-	var options = {
-		"method": "POST",
-		"hostname": "stundenplan.hamburg.de",
-		"port": null,
-		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionID + "?school=HH5888",
-		"headers": {
-			"cache-control": "no-cache",
-			"JSESSIONID": sessionID
-		}
-	};
-
-	var req = http.request(options, function (res) {
-		var chunks = [];
-
-		res.on("data", function (chunk) {
-			chunks.push(chunk);
-		});
-
-		res.on("end", function () {
-			var body = Buffer.concat(chunks);
-			console.log("gotClasses")
-			console.log(body.toString())
-			request.end(body.toString())
-		});
-	});
-
-	req.write("{\"id\":\"ID\",\"method\":\"getKlassen\",\"jsonrpc\":\"2.0\"}");
+	req.write("{\"id\":\"ID\",\"method\":\""+type+"\",\"jsonrpc\":\"2.0\"}");
 	req.end();
 }
 
