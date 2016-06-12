@@ -5,8 +5,15 @@ var dispatcher = require('httpdispatcher');
 //Der Port, auf dem der Server läuft.
 const PORT=8080;
 
+//Die verschieden Adressteile, die bei der Kommunikation mit der API benötigt werden
+const baseAdress = "stundenplan.hamburg.de";
+const relativeAdressUnauthenticated = "/WebUntis/jsonrpc.do?school=HH5888";
+const relativeAdressAuthenticated1 = "/WebUntis/jsonrpc.do;jsessionid=";
+const relativeAdressAuthenticated2 = "?school=HH5888";
+
 //Die Variable, die die jetzige Sesion speichert
 var ergebnis;
+
 //Diese Mehotde verarbeitet alle Anfragen an der Server
 function handleRequest(request, response){
 	try {
@@ -51,9 +58,9 @@ function authenticate(request, type)
 
 	var options = {
 		"method": "POST",
-		"hostname": "stundenplan.hamburg.de",
+		"hostname": baseAdress,
 		"port": null,
-		"path": "/WebUntis/jsonrpc.do?school=HH5888",
+		"path": relativeAdressUnauthenticated,
 		"headers": {
 			"cache-control": "no-cache"
 		}
@@ -87,9 +94,9 @@ function mergedRequests(sessionID, type, request)
 
 	var options = {
 		"method": "POST",
-		"hostname": "stundenplan.hamburg.de",
+		"hostname": baseAdress,
 		"port": null,
-		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionID + "?school=HH5888",
+		"path": relativeAdressAuthenticated1 + sessionID + relativeAdressAuthenticated2,
 		"headers": {
 			"cache-control": "no-cache",
 			"JSESSIONID": sessionID
@@ -122,9 +129,9 @@ function logout(sessionId)
 
 	var options = {
 		"method": "POST",
-		"hostname": "stundenplan.hamburg.de",
+		"hostname": baseAdress,
 		"port": null,
-		"path": "/WebUntis/jsonrpc.do;jsessionid=" + sessionId + "?school=HH5888",
+		"path": relativeAdressAuthenticated1 + sessionId + relativeAdressAuthenticated2,
 		"headers": {
 			"cache-control": "no-cache",
 			"JSESSIONID": sessionId
