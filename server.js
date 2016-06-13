@@ -17,9 +17,9 @@ var ergebnis;
 //Diese Mehotde verarbeitet alle Anfragen an der Server
 function handleRequest(request, response){
 	try {
-		//log the request on console
+		//Logt die aufgerufene Adresse
 		console.log(request.url);
-		//Disptach
+		//Gibt den Aufruf an den Dispatcher weiter
 		dispatcher.dispatch(request, response);
 	} catch(err) {
 		console.log(err);
@@ -83,7 +83,7 @@ function authenticate(request, type)
 		});
 	});
 
-	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"Benutzer\",\n        \"password\": \"Passwort\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
+	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"HWG\",\n        \"password\": \"WMS4\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
 	req.end();
 }
 
