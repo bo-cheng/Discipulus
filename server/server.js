@@ -36,8 +36,6 @@ app.delete("/todoList", function(req, res) {
 	res.end();
 })
 app.get("/todoList", function(req, res) {
-	console.log("GET /todoList")
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	console.log(todoList.getList());
 	res.end(todoList.getList())
 })

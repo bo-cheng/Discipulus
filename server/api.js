@@ -13,7 +13,6 @@ var authenticate = function(request, type)
 	if(ergebnis!=null)
 	{
 		logout(ergebnis.result.sessionId)
-		console.log("Abgemeldet")
 	}
 	var http = require("https");
 
@@ -39,7 +38,6 @@ var authenticate = function(request, type)
 		res.on("end", function () {
 			var body = Buffer.concat(chunks);
 			ergebnis = JSON.parse(body.toString())
-			console.log(ergebnis.result.sessionId)
 			mergedRequests(ergebnis.result.sessionId, type, request);
 		});
 	});
@@ -73,7 +71,6 @@ var mergedRequests = function(sessionID, type, request)
 
 		res.on("end", function () {
 			var body = Buffer.concat(chunks);
-			console.log(type+"; Length: " + body.toString().length)
 			request.end(body.toString())
 		});
 	});
