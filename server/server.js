@@ -16,12 +16,8 @@ app.listen(PORT, function () {
 	console.log('Server started on port %s', PORT);
 });
 
-//Verarbeiten die beiden unterschiedlichen Requests
-app.post("/getSubjects", function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	apiAccess.authenticate(res,req.url.slice(1));
-});
-app.post("/getKlassen", function(req, res) {
+//Verarbeiten der unterschiedlichen Requests
+app.post(/get/, function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	apiAccess.authenticate(res,req.url.slice(1));
 });

@@ -14,8 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bo-cheng/Website.git",
-    "message": "No need to try the password. It's already changed and I haven't used it for any other services. The new password is also >30 characters long and contains Lower and Bigger Case Letters as well as Numbers and Special characters. No need to try it out. There's no chance for you. ;("
+    "url": "git+https://github.com/bo-cheng/Website.git"
   },
   "author": "Bo-Cheng, Julian, Markus",
   "license": "ISC",
