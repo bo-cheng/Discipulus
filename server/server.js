@@ -1,19 +1,19 @@
+//Die beiden Module, die sich um die ToDo List bzw. die Kommunikation mit der WebUntis API kümmern
 var apiAccess = require("./api.js");
 var todoList = require("./todoList.js")
-
-var cors = require("cors");
 
 //Der Port, auf dem der Server läuft.
 const PORT=8080;
 
 //Deklariert den Server mit der Callback Methode
 var express = require('express');
+var cors = require("cors");
 var app = express();
 app.use(cors());
 
 //Startet den Server
 app.listen(PORT, function () {
-	console.log('Example app listening on port %s!', PORT);
+	console.log('Server started on port %s', PORT);
 });
 
 //Verarbeiten die beiden unterschiedlichen Requests
