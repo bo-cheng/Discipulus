@@ -4,23 +4,23 @@ $(document).ready(function(){
 	$('select').material_select();
 	$('ul.tabs').tabs();
 	//Zeigt die Start Ansicht an
-	zeigeFächerAn();
+	zeigeFaecherAn();
 });
 
 //Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Fächer von der WebUntis API.
-function zeigeFächerAn()
+function zeigeFaecherAn()
 {
-	macheRequestUndFülleTabelle("getSubjects", "fächer")
+	macheRequestUndFuelleTabelle("getSubjects", "fächer")
 }
 
 //Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Klassen von der WebUntis API.
 function zeigeKlassenAn()
 {
-	macheRequestUndFülleTabelle("getClasses", "klassen")
+	macheRequestUndFuelleTabelle("getClasses", "klassen")
 }
 
 //Macht ein Request an einen nodeJS Server. Dieser fragt die Daten bei der WebUntis API ab und gibt sie wieder zurück. Das Leeren und Befüllen der Tabelle wird delegiert.
-function macheRequestUndFülleTabelle(requestTyp, typ)
+function macheRequestUndFuelleTabelle(requestTyp, typ)
 {
 	clearTable()
 
@@ -55,21 +55,21 @@ function fillTable(stundenListe, typ)
 			setTableHeaders("Klassenname", "Klassenabkürzung", "Ist Aktiv");
 		}
 
-	werteZuTabelleHinzufügen(stundenListe)
+	werteZuTabelleHinzufuegen(stundenListe)
 }
 
 //Iteriert über die einzelnen Einträge der Wertelist. Das konkrete hinzufügen wird delegiert.
-function werteZuTabelleHinzufügen(werte)
+function werteZuTabelleHinzufuegen(werte)
 {
 	var werteListe = werte.result
 	for (i = 0; i < werteListe.length; i++)
 	{
-		fügeZuTabelleHinzu(werteListe[i])
+		fuegeZuTabelleHinzu(werteListe[i])
 	}
 }
 
 //Fügt ein Element der Tabelle hinzu.
-function fügeZuTabelleHinzu(stunde)
+function fuegeZuTabelleHinzu(stunde)
 {
 	var tabelle = document.getElementById("tableID");
 
