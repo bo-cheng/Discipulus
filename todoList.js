@@ -1,16 +1,16 @@
 var fileSystem = require("fs");
 
 var writeToDatabase = function(inhalt) {
-	var inJSON = JSON.parse(fileSystem.readFileSync("./discipulus/datenbank.json"));
+	var inJSON = JSON.parse(fileSystem.readFileSync("./datenbank.json"));
 	console.log(inJSON);
 	inJSON["items"].push({"inhalt": inhalt});
 	console.log(inJSON);
-	fileSystem.writeFileSync("./discipulus/datenbank.json", JSON.stringify(inJSON));
+	fileSystem.writeFileSync("./datenbank.json", JSON.stringify(inJSON));
 
 }
 
 var deleteFromDatabase = function(inhalt) {
-	var inJSON = JSON.parse(fileSystem.readFileSync("./discipulus/datenbank.json"));
+	var inJSON = JSON.parse(fileSystem.readFileSync("./datenbank.json"));
 	console.log(inJSON)
 	for (i=0; i < inJSON["items"].length; i++)
 	{
@@ -20,11 +20,11 @@ var deleteFromDatabase = function(inhalt) {
 		}
 	}
 	console.log(inJSON)
-	fileSystem.writeFileSync("./discipulus/datenbank.json", JSON.stringify(inJSON));
+	fileSystem.writeFileSync("./datenbank.json", JSON.stringify(inJSON));
 }
 
 var getList = function() {
-	var inJSON = JSON.parse(fileSystem.readFileSync("./discipulus/datenbank.json"));
+	var inJSON = JSON.parse(fileSystem.readFileSync("./datenbank.json"));
 	return JSON.stringify(inJSON);
 }
 

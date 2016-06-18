@@ -5,6 +5,7 @@ $(document).ready(function() {
     $('ul.tabs').tabs();
     //Zeigt die Start Ansicht an
     showSubjects();
+	getToDoList();
 });
 
 //Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Fächer von der WebUntis API.
@@ -33,7 +34,7 @@ function makeRequest(requestTyp, typ) {
 
 //Leert die Tabelle. D.h. dass Childnodes vom TableBody entfernt werden.
 function clearTable() {
-    var myNode = $('#tableID');
+	var myNode = document.getElementById("tableID")
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
     }
@@ -43,25 +44,26 @@ function clearTable() {
 function fillTable(stundenListe, typ) {
     if (typ == "fächer") {
         setTableHeaders(["Fachname", "Fachabkürzung", "Ist Aktiv"]);
-    } else if (typ = "klassen") {
+    } else if (typ == "klassen") {
         setTableHeaders(["Klassenname", "Klassenabkürzung", "Ist Aktiv"]);
     }
 
+	clearTable();
+
     for (i = 0; i < stundenListe.result.length; i++) {
-        additem(werteListe[i])
+        addItem(stundenListe.result[i])
     }
 }
 
 //Fügt ein Element der Tabelle hinzu.
 function addItem(stunde) {
-    var tabelle = $('#tableID');
+    var tabelle = document.getElementById("tableID")
 
     var row = tabelle.insertRow(-1);
     row.setAttribute("id", stunde.id)
 
     if (stunde.backColor != null) {
         row.setAttribute("style", "background-color: #" + stunde.backColor.toString())
-        console.log("Hintergrundfarbe " + stunde.backColor + " gesetzt.")
     }
 
     var row1 = row.insertCell(0);
@@ -76,7 +78,7 @@ function addItem(stunde) {
 //Setzt die Header der Tabelle.
 function setTableHeaders(headers) {
     for(var i=0;i<headers.length;i++) {
-        $('name' + i).html(headers[i]);
+        $('#name' + i).html(headers[i]);
     }
 }
 
