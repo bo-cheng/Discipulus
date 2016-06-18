@@ -18,23 +18,19 @@ app.listen(PORT, function () {
 
 //Verarbeiten der unterschiedlichen Requests
 app.post(/get/, function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	apiAccess.authenticate(res,req.url.slice(1));
 });
 
 app.route("/todoList")
 	.put(function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	todoList.writeToDatabase(req.headers.inhalt);
 	res.end();
 })
 	.delete(function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	todoList.deleteFromDatabase(req.headers.inhalt);
 	res.end();
 })
 	.get(function(req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	res.end(todoList.getList())
 });
 
