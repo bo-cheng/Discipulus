@@ -1,6 +1,6 @@
 {
   "name": "jugendhackt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The Code for the JugendHackt Nord 2016 Project Discipulus",
   "main": "server.js",
   "dependencies": {
