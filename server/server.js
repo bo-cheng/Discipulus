@@ -19,23 +19,26 @@ app.listen(PORT, function () {
 //Verarbeiten die beiden unterschiedlichen Requests
 app.post("/getSubjects", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	apiAccess.authenticate(res,"getSubjects"); //FUTURE: req für routing benutzen
+	apiAccess.authenticate(res,req.url.slice(1));
 });
-app.post("/getClasses", function(req, res) {
+app.post("/getKlassen", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
-	apiAccess.authenticate(res,"getKlassen"); //FUTURE: req für routing benutzen
+	apiAccess.authenticate(res,req.url.slice(1));
 });
-app.put("/todoList", function(req, res) {
+
+app.route("/todoList")
+	.put(function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	todoList.writeToDatabase(req.headers.inhalt);
 	res.end();
 })
-app.delete("/todoList", function(req, res) {
+	.delete(function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	todoList.deleteFromDatabase(req.headers.inhalt);
 	res.end();
 })
-app.get("/todoList", function(req, res) {
+	.get(function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain', "Access-Control-Allow-Origin": "*"});
 	res.end(todoList.getList())
-})
+});
+

@@ -15,7 +15,7 @@ function showSubjects() {
 
 //Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Klassen von der WebUntis API.
 function showClasses() {
-    makeRequest("getClasses", "klassen")
+    makeRequest("getKlassen", "klassen")
 }
 
 //Macht ein Request an einen nodeJS Server. Dieser fragt die Daten bei der WebUntis API ab und gibt sie wieder zurück. Das Leeren und Befüllen der Tabelle wird delegiert.
