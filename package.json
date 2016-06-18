@@ -1,0 +1,25 @@
+{
+  "name": "jugendhackt",
+  "version": "0.0.1",
+  "description": "The Code for the JugendHackt Nord 2016 Project Discipulus",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "httpdispatcher": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Qup42:hA11oDaDrAußeNiHr@github.com/bo-cheng/Website.git"
+  },
+  "author": "Bo-Cheng, Julian, Markus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bo-cheng/Website/issues"
+  },
+  "homepage": "https://github.com/bo-cheng/Website#readme"
+}

@@ -97,9 +97,19 @@
 						</div>
 					</div>
 
-						<div id="test2" class="col s12" height="100%">
-							<iframe width="100%" height="100%" frameborder="0" src="http://192.168.1.27:4594"></iframe>
+					<div id="test2" class="col s12" height="100%">
+						<form class="col s12" action="javascript:addCurrentInputedToDoItem()" id="todoItemForm">
+							<div class="row">
+								<div class="input-field col s12">
+									<input id="todoItem" type="text">
+									<label for="todoItem">ToDo Eintrag</label>
+								</div>
+							</div>
+						</form>
+
+						<div class="collection" height="100%" width="100%" id="todoList">
 						</div>
+					</div>
 				</div>
 			</div>
 		</div>

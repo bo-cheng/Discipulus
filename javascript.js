@@ -5,6 +5,8 @@ $(document).ready(function(){
 	$('ul.tabs').tabs();
 	//Zeigt die Start Ansicht an
 	zeigeFaecherAn();
+
+	getToDoList();
 });
 
 //Delegiert das Leeren der Tabelle und das Befüllen mit den Daten der Fächer von der WebUntis API.
@@ -47,13 +49,13 @@ function clearTable()
 function fillTable(stundenListe, typ)
 {
 	if(typ=="fächer")
-		{
-			setTableHeaders("Fachname", "Fachabkürzung", "Ist Aktiv");
-		}
+	{
+		setTableHeaders("Fachname", "Fachabkürzung", "Ist Aktiv");
+	}
 	else if (typ = "klassen")
-		{
-			setTableHeaders("Klassenname", "Klassenabkürzung", "Ist Aktiv");
-		}
+	{
+		setTableHeaders("Klassenname", "Klassenabkürzung", "Ist Aktiv");
+	}
 
 	werteZuTabelleHinzufuegen(stundenListe)
 }
@@ -80,7 +82,7 @@ function fuegeZuTabelleHinzu(stunde)
 	if(stunde.backColor != null)
 	{
 		row.setAttribute("style", "background-color: #" + stunde.backColor.toString())
-		console.log("Hintergrundfarbe " + stunde.backColor + " gesetzt.")
+		//console.log("Hintergrundfarbe " + stunde.backColor + " gesetzt.")
 	}
 
 	var row1 = row.insertCell(0);
@@ -98,4 +100,77 @@ function setTableHeaders(header1, header2, header3)
 	document.getElementById("name1").innerHTML=header1
 	document.getElementById("name2").innerHTML=header2
 	document.getElementById("name3").innerHTML=header3
+}
+
+function addCurrentInputedToDoItem()
+{
+	var item = document.getElementById("todoItem")
+	addToDoItem(item.value)
+	document.getElementById("todoItemForm").reset()
+}
+
+function addToDoItem(item)
+{
+	if (item!="")
+	{
+		$.ajax({
+			type: "PUT",
+			url: "http://127.0.0.1:8080/todoList",
+			headers: {
+				"inhalt": item
+			}
+		})
+			.done(function (data) {
+			getToDoList()
+		});
+	}
+}
+
+function deleteToDoItem(item)
+{
+	document.getElementById(item).parentNode.removeChild(document.getElementById(item));
+
+	$.ajax({
+		type: "DELETE",
+		url: "http://127.0.0.1:8080/todoList",
+		headers: {
+			"inhalt": item
+		}
+	})
+		.done(function (data) {
+		getToDoList()
+	});
+}
+
+function getToDoList()
+{
+	$.ajax({
+		type: "GET",
+		url: "http://127.0.0.1:8080/todoList"
+	})
+		.done(function (data) {
+		fillToDoList(JSON.parse(data));
+	});
+}
+
+function fillToDoList(list)
+{
+	var node = document.getElementById("todoList");
+	while(node.firstChild)
+	{
+		node.removeChild(node.firstChild)
+	}
+
+	for (item in list["items"])
+	{
+		var thisItem = list["items"][item]["inhalt"];
+		var listItem = document.createElement("a");
+		var item = document.createTextNode(thisItem);
+		listItem.appendChild(item);
+		listItem.setAttribute("href", 'javascript:deleteToDoItem("' + thisItem + '")')
+		listItem.setAttribute("class", "collection-item")
+		listItem.setAttribute("id", thisItem)
+		var todoList = document.getElementById("todoList")
+		todoList.appendChild(listItem)
+	}
 }
