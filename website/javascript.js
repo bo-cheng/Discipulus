@@ -21,8 +21,6 @@ function showClasses() {
 
 //Macht ein Request an den nodeJS Server. Dieser fragt die Daten bei der WebUntis API ab und gibt sie wieder zurück. Das Leeren und Befüllen der Tabelle wird delegiert.
 function makeRequest(requestTyp, typ) {
-	clearTable();
-
 	$.ajax(
 		{
 			type: "GET",
@@ -32,27 +30,19 @@ function makeRequest(requestTyp, typ) {
 			}
 		})
 		.done(function (data) {
-		fillTable(JSON.parse(data), typ);
+		clearAndFillTable(JSON.parse(data), typ);
 	});
 }
 
-//Leert die Tabelle. D.h. dass Childnodes vom TableBody entfernt werden.
-function clearTable() {
-	var myNode = document.getElementById("tableID");
-	while (myNode.firstChild) {
-		myNode.removeChild(myNode.firstChild);
-	}
-}
-
 //Aktualisiert die Header der Tabelle. Die Befüllung wird weiter delegiert.
-function fillTable(stundenListe, typ) {
+function clearAndFillTable(stundenListe, typ) {
 	if (typ === "fächer") {
 		setTableHeaders(["Fachname", "Fachabkürzung", "Ist Aktiv"]);
 	} else if (typ === "klassen") {
 		setTableHeaders(["Klassenname", "Klassenabkürzung", "Ist Aktiv"]);
 	}
 
-	clearTable();
+	$("#tableID").empty()
 
 	for (i = 0; i < stundenListe.result.length; i++) {
 		addItem(stundenListe.result[i]);
@@ -82,9 +72,8 @@ function setTableHeaders(headers) {
 
 function addCurrentInputedToDoItem()
 {
-	var item = document.getElementById("todoItem")
-	addToDoItem(item.value)
-	document.getElementById("todoItemForm").reset()
+	addToDoItem($("#todoItem").val())
+	$("#todoItemForm").trigger("reset");
 }
 
 function addToDoItem(item)
@@ -133,11 +122,7 @@ function getToDoList()
 
 function fillToDoList(list)
 {
-	var node = document.getElementById("todoList");
-	while(node.firstChild)
-	{
-		node.removeChild(node.firstChild)
-	}
+	$("#todoList").empty()
 
 	var counter = 0;
 	for (item in list["items"])
