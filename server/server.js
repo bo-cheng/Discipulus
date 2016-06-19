@@ -17,8 +17,20 @@ app.listen(PORT, function () {
 });
 
 //Verarbeiten der unterschiedlichen Requests
-app.post(/get/, function(req, res) {
-	apiAccess.authenticate(res,req.url.slice(1));
+app.post("/authenticate", function(req, res) {
+	apiAccess.getAuth(res, req.headers.username, req.headers.password);
+});
+
+app.get("/getSubjects", function(req, res) {
+	apiAccess.mergedRequests(req.headers.sessionid, req.url.slice(1), res)
+});
+
+app.get("/getKlassen", function(req, res) {
+	apiAccess.mergedRequests(req.headers.sessionid, req.url.slice(1), res)
+});
+
+app.post("/logout", function(req, res) {
+	apiAccess.logout(req.headers.sessionid, res);
 });
 
 app.route("/todoList")

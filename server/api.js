@@ -4,11 +4,8 @@ const relativeAdressUnauthenticated = "/WebUntis/jsonrpc.do?school=HH5888";
 const relativeAdressAuthenticated1 = "/WebUntis/jsonrpc.do;jsessionid=";
 const relativeAdressAuthenticated2 = "?school=HH5888";
 
-//Die Variable, die die jetzige Sesion speichert
-var ergebnis;
-
 //Authentifiziert den Server mit einer neuen SessionID
-var authenticate = function(request, type)
+var getAuth = function(response, username, password)
 {
 	var http = require("https");
 
@@ -29,21 +26,26 @@ var authenticate = function(request, type)
 			chunks.push(chunk);
 		});
 
-		var returnValue;
-
 		res.on("end", function () {
-			var body = Buffer.concat(chunks);
-			ergebnis = JSON.parse(body.toString())
-			mergedRequests(ergebnis.result.sessionId, type, request);
+			var json = JSON.parse(Buffer.concat(chunks).toString())
+			console.log(json)
+			if (json.hasOwnProperty("error"))
+			{
+				response.end("Invalid credentials");
+			}
+			else
+			{
+				response.end(JSON.parse(Buffer.concat(chunks).toString()).result.sessionId);
+			}
 		});
 	});
 
-	req.write("{\n    \"id\": \"ID\",\n    \"method\": \"authenticate\",\n    \"params\": {\n        \"user\": \"HWG\",\n        \"password\": \"WMS4\",\n        \"client\": \"Client\"\n        },\n    \"jsonrpc\": \"2.0\"\n}");
+	req.write('{\n    "id": "ID",\n    "method": "authenticate",\n    "params": {\n        "user": "'+username+'",\n        "password": "'+password+'",\n        "client": "Client"\n        },\n    "jsonrpc": "2.0"\n}');
 	req.end();
 }
 
 //Ruft mit sessionID an der WebUntis API die Operation type auf und gibt das Ergebnis an request zurück.
-var mergedRequests = function(sessionID, type, request)
+var mergedRequests = function(sessionID, type, response)
 {
 	var http = require("https");
 
@@ -66,8 +68,7 @@ var mergedRequests = function(sessionID, type, request)
 		});
 
 		res.on("end", function () {
-			var body = Buffer.concat(chunks);
-			request.end(body.toString())
+			response.end(Buffer.concat(chunks).toString());
 		});
 	});
 
@@ -77,7 +78,7 @@ var mergedRequests = function(sessionID, type, request)
 
 
 //Meldet den Server ab.
-var logout = function(sessionId)
+var logout = function(sessionId, response)
 {
 	var http = require("https");
 
@@ -92,7 +93,17 @@ var logout = function(sessionId)
 		}
 	};
 
-	var req = http.request(options, function (res) {});
+	var req = http.request(options, function (res) {
+		var chunks = [];
+
+		res.on("data", function (chunk) {
+			chunks.push(chunk);
+		});
+
+		res.on("end", function () {
+			response.end(Buffer.concat(chunks).toString());
+		});
+	});
 
 	req.write("{\"id\":\"ID\",\"method\":\"logout\",\"params\":{},\"jsonrpc\":\"2.0\"}");
 	req.end();
@@ -100,4 +111,4 @@ var logout = function(sessionId)
 
 exports.logout = logout;
 exports.mergedRequests = mergedRequests;
-exports.authenticate = authenticate;
+exports.getAuth = getAuth;

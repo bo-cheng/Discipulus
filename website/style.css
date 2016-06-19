@@ -19,3 +19,9 @@ body {
 #test2 {
 	height: 100%;
 }
+#test1Table {
+	display: none
+}
+#test1Preloader {
+	display: none
+}
