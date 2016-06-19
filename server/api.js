@@ -10,10 +10,6 @@ var ergebnis;
 //Authentifiziert den Server mit einer neuen SessionID
 var authenticate = function(request, type)
 {
-	if(ergebnis!=null)
-	{
-		logout(ergebnis.result.sessionId)
-	}
 	var http = require("https");
 
 	var options = {
