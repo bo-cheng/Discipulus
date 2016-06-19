@@ -106,18 +106,18 @@ function addToDoItem(item)
 
 function deleteToDoItem(item)
 {
-	document.getElementById(item).parentNode.removeChild(document.getElementById(item));
-
 	$.ajax({
 		type: "DELETE",
 		url: "http://127.0.0.1:8080/todoList",
 		headers: {
-			"inhalt": item
+			"inhalt": $("#"+item).text()
 		}
 	})
 		.done(function (data) {
 		getToDoList()
 	});
+
+	$("#"+item).remove();
 }
 
 function getToDoList()
@@ -139,17 +139,18 @@ function fillToDoList(list)
 		node.removeChild(node.firstChild)
 	}
 
+	var counter = 0;
 	for (item in list["items"])
 	{
 		var thisItem = list["items"][item]["inhalt"];
 		var listItem = document.createElement("a");
 		var item = document.createTextNode(thisItem);
 		listItem.appendChild(item);
-		listItem.setAttribute("href", 'javascript:deleteToDoItem("' + thisItem + '")')
+		listItem.setAttribute("href", 'javascript:deleteToDoItem("' + counter + '")')
 		listItem.setAttribute("class", "collection-item")
-		listItem.setAttribute("id", thisItem)
-		var todoList = document.getElementById("todoList")
-		todoList.appendChild(listItem)
+		listItem.setAttribute("id", counter)
+		$("#todoList").append(listItem)
+		counter++;
 	}
 }
 
@@ -160,15 +161,14 @@ function login()
 		type: "POST",
 		url: "http://127.0.0.1:8080/authenticate",
 		headers: {
-			"username": document.getElementById("username").value,
-			"password": document.getElementById("password").value
+			"username": $("#username").val(),
+			"password": $("#password").val()
 		}
 	})
 		.done(function (data) {
 		result = data.toString();
 		if (result != "Invalid credentials")
 		{
-			console.log(result);
 			$("#test1YouNeedToLogin").hide();
 			$("#test1Table").show();
 			sessionID = result;

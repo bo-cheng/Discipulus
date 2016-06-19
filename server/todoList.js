@@ -9,6 +9,7 @@ var writeToDatabase = function(inhalt) {
 }
 
 var deleteFromDatabase = function(inhalt) {
+	console.log(inhalt);
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
 	for (i=0; i < inJSON["items"].length; i++)
 	{

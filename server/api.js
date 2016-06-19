@@ -28,7 +28,6 @@ var getAuth = function(response, username, password)
 
 		res.on("end", function () {
 			var json = JSON.parse(Buffer.concat(chunks).toString())
-			console.log(json)
 			if (json.hasOwnProperty("error"))
 			{
 				response.end("Invalid credentials");
