@@ -1,6 +1,6 @@
 //Die beiden Module, die sich um die ToDo List bzw. die Kommunikation mit der WebUntis API kümmern
 var apiAccess = require("./api.js");
-var todoList = require("./todoList.js")
+var todoList = require("./todoList.js");
 
 //Der Port, auf dem der Server läuft.
 const PORT=8080;

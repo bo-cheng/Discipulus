@@ -12,7 +12,7 @@ var deleteFromDatabase = function(inhalt) {
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
 	for (i=0; i < inJSON["items"].length; i++)
 	{
-		// TODO Somewhat buggy semes to leave out the last one if there are two or more
+		// FIXME Somewhat buggy semes to leave out the last one if there are two or more
 		if (inJSON["items"][i]["inhalt"] == inhalt)
 		{
 			inJSON["items"].splice(i,1)
