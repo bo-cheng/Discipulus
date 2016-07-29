@@ -1,6 +1,6 @@
 var fileSystem = require("fs");
 
-const databasePath = "./datenbank.json";
+const databasePath = "./server/datenbank.json";
 
 function isInDatabase(inhalt) {
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
