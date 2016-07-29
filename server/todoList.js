@@ -2,10 +2,27 @@ var fileSystem = require("fs");
 
 const databasePath = "./datenbank.json";
 
-var writeToDatabase = function(inhalt) {
+function isInDatabase(inhalt) {
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
-	inJSON["items"].push({"inhalt": inhalt});
-	fileSystem.writeFileSync(databasePath, JSON.stringify(inJSON));
+	for (i=0; i < inJSON["items"].length; i++)
+	{
+		if (inJSON["items"][i]["inhalt"] == inhalt)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+var writeToDatabase = function(inhalt) {
+	if(!isInDatabase(inhalt))
+	{
+		var inJSON = 
+JSON.parse(fileSystem.readFileSync(databasePath));
+		inJSON["items"].push({"inhalt": inhalt});
+		fileSystem.writeFileSync(databasePath, 
+JSON.stringify(inJSON));
+	}
 }
 
 var deleteFromDatabase = function(inhalt) {
