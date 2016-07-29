@@ -6,7 +6,7 @@ function isInDatabase(inhalt) {
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
 	for (i=0; i < inJSON["items"].length; i++)
 	{
-		if (inJSON["items"][i]["inhalt"] == inhalt)
+		if (inJSON["items"][i]["inhalt"] === inhalt)
 		{
 			return true;
 		}
@@ -29,7 +29,7 @@ var deleteFromDatabase = function(inhalt) {
 	var inJSON = JSON.parse(fileSystem.readFileSync(databasePath));
 	for (i=0; i < inJSON["items"].length; i++)
 	{
-		if (inJSON["items"][i]["inhalt"] == inhalt)
+		if (inJSON["items"][i]["inhalt"] === inhalt)
 		{
 			inJSON["items"].splice(i,1);
 			i--;
